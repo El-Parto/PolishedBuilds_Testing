@@ -11,9 +11,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] private GUIManager gooey;
     [SerializeField] private GameData data;
     //[SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private float verticalSpeed;
+    public float verticalSpeed;
 
-    [SerializeField] private float horizontalSpeed;
+    public float horizontalSpeed;
     public float visibleScore;
     
     // Start is called before the first frame update

@@ -20,7 +20,7 @@ public class GUIManager : MonoBehaviour
     
     //[SerializeField] private Enemy eEnem;
     [SerializeField] private GameData gData;
-    private float finalScore;
+    public float finalScore;
     
     // Start is called before the first frame update
     void Start()

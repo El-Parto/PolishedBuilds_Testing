@@ -35,14 +35,14 @@ public class PlayerController : MonoBehaviour
         playerRB.velocity = new Vector2(moving, 0);
 
         Move();
-        Fire();
+        Fire(bulletPrefab);
         Death();
     }
     
     /// <summary>
     /// moves left and right based on move speed and input manager's "horizontal" keycodes.
     /// </summary>
-    private void Move()
+    public void Move()
     {
 
         moving = Input.GetAxisRaw("Horizontal") * moveSpeed;
@@ -52,11 +52,12 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Instantiates a "bullet" gameobject after pressing down spacebar.
     /// </summary>
-    private void Fire()
+    public void Fire(GameObject _bullet)
     {
+        _bullet = bulletPrefab;
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Instantiate(bulletPrefab, playerPos);
+            Instantiate(_bullet, playerPos);
             
         }
         

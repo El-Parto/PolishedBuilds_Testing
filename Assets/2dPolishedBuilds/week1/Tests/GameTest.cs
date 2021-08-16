@@ -1,6 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
+
+using System.Numerics;
+using System.Threading;
+
+using UnityEditor;
+using UnityEditor.SceneManagement;
+
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -43,7 +50,7 @@ public class GameTest
         GameObject gameGo = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefab/Game"));
         GameObject eSpawn = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefab/Game"));
 
-        //gameGo = tGS.GetComponent<asteroid>();
+        tGS = gameGo.gameObject.GetComponent<TheGameScript>();
 
     }
 
@@ -75,14 +82,15 @@ public class GameTest
         // eg "prefabs/enemy
 
         EnemySpawner enemySpawner = MonoBehaviour.Instantiate(Resources.Load < EnemySpawner > ("Prefab/EnemySpawner"));
-        
+
+        enemySpawner.GetComponent<Camera>();
         
         // * graba reference to the asteroid itself
         //GameObject gameGo = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Game"));
         //it may also be beneficial to load the class itself.
         // where game GO is whatever game object you want to test.
-        
-        
+
+
         GameObject asteroid = enemySpawner.Spawning();
         
         
@@ -115,16 +123,74 @@ public class GameTest
     
     //this type of testing is intergration testing. 
     [UnityTest]
-    public IEnumerator HitDetection()
+    public IEnumerator Lose()
     {
+        int lives;
+        
+        bool lose = pControl.testLose;
+        lives = 0;
         GameObject asteroid = tGS.enemySpawner.Spawning();
         asteroid.transform.position = tGS.playerController.gameObject.transform.position;
         yield return new WaitForSeconds(3);
-        Assert.IsTrue(tGS);
+        UnityEngine.Assertions.Assert.IsTrue(lose);
         Object.Destroy(asteroid);
+        
 
     }
-    
+
+    [UnityTest]
+    public IEnumerator PlayerCanMove()
+    {
+        GameObject player = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefab/Player"));
+        float playerMovement = player.transform.position.x;
+
+        yield return new WaitForSeconds(2);
+        
+        Assert.IsNotNull(pControl);
+        Object.Destroy(player);
+        
+    }
+
+    [UnityTest]
+    public IEnumerator LifeLost()
+    {
+        int lives = 1;
+        bool lostlife = false;
+        GameObject wall = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefab/Walls"));
+        
+        GameObject asteroid = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefab/enemy"));
+        UnityEngine.Vector2 pos = wall.transform.position;
+
+        asteroid.gameObject.transform.position = wall.transform.position;
+
+        if(lives == 0)
+            lostlife = true;
+        
+        yield return new WaitForSeconds(2);
+        
+        Assert.IsTrue(lostlife);
+        Object.Destroy(wall);
+        Object.Destroy(asteroid);
+    }
+
+    [UnityTest]
+    public IEnumerator BulletSpawn()
+    {
+        GameObject _bulletObject = MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefab/Bullet"));
+        GameObject bullet = _bulletObject;
+
+        pControl.Fire(bullet);
+
+
+        yield return new WaitForSeconds(2);
+        
+        UnityEngine.Assertions.Assert.IsNull(bullet);
+
+        
+
+        Object.Destroy(_bulletObject);
+    }
+
 
 }
 

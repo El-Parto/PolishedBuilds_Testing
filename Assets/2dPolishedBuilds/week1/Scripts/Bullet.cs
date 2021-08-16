@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     private GUIManager gui;
 
     [SerializeField] private GameData gameData;
-    private float bulletSpeed = 15;
+    public float bulletSpeed = 15;
     
     // Start is called before the first frame update
     void Start()
